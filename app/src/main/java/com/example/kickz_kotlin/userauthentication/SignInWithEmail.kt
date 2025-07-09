@@ -1,5 +1,6 @@
 package com.example.kickz_kotlin.userauthentication
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +37,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import com.example.kickz_kotlin.utils.CommonTextField
 
 @Composable
@@ -80,32 +82,72 @@ fun SignInWithEmail() {
                     spotColor = KickzColors.Black
                 ), colors = CardDefaults.cardColors(
                 containerColor = Color.White
-            ), shape = RoundedCornerShape(12.dp)
+            ), shape = RoundedCornerShape(14.dp)
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(10.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "Welcome Back",
+                    "Create An Account",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = KickzColors.Black
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    "Sign in to your account",
+                    "Join KickzHubbb for your best shopping experience yet.",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = KickzColors.Gray500
+                    fontWeight = FontWeight.Light,
+                    color = KickzColors.Gray500, textAlign = TextAlign.Center
                 )
             }
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(10.dp)
                     .fillMaxWidth()
             ) {
+                Text(
+                    "Email",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = KickzColors.Black
+                )
+
+                CommonTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholderText = "Enter your email",
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    "Email",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = KickzColors.Black
+                )
+
+                CommonTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholderText = "Enter your email",
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    "Email",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = KickzColors.Black
+                )
+
+                CommonTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholderText = "Enter your email",
+                    modifier = Modifier.fillMaxWidth()
+                )
                 Text(
                     "Email",
                     fontSize = 16.sp,
