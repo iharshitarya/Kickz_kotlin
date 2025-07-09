@@ -24,12 +24,22 @@ import androidx.compose.ui.unit.sp
 import com.example.kickz_kotlin.ui.theme.KickzColors
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
+import com.example.kickz_kotlin.navigation.Screen
+import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navController: NavController) {
+
+    LaunchedEffect(Unit) {
+        delay(2000)
+        navController.navigate(Screen.SignUp.route){}
+    }
+
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
     ) {

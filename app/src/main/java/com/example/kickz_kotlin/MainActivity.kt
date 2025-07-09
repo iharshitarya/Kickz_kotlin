@@ -11,20 +11,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.kickz_kotlin.navigation.NavigationGraph
 import com.example.kickz_kotlin.screens.SplashScreen
 import com.example.kickz_kotlin.ui.theme.Kickz_kotlinTheme
-import com.example.kickz_kotlin.userauthentication.SignInWithEmail
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             Kickz_kotlinTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    SplashScreen()
-                    SignInWithEmail()
-                }
+                val navController = rememberNavController()
+                NavigationGraph(
+                    navController = navController
+                )
             }
         }
     }
