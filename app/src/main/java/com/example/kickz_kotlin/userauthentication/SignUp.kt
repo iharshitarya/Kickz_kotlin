@@ -1,6 +1,7 @@
 package com.example.kickz_kotlin.userauthentication
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -23,9 +24,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,15 +42,17 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kickz_kotlin.ui.theme.KickzColors
 import androidx.navigation.NavHostController
 import com.example.kickz_kotlin.ui.theme.CommonTextStyles
 import com.example.kickz_kotlin.utils.CommonBackground
 import com.example.kickz_kotlin.utils.CommonTextField
 import com.example.kickz_kotlin.utils.VerticalSpacer
+import com.example.kickz_kotlin.viewmodel.SignUpViewModel
 
 @Composable
-fun SignUp(navController: NavHostController) {
+fun SignUp(navController: NavHostController, viewModel: SignUpViewModel = hiltViewModel()) {
 
     var email by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
@@ -63,6 +67,42 @@ fun SignUp(navController: NavHostController) {
 
     val context = LocalContext.current
 
+    val signUpResult by viewModel.signUpResult.collectAsState()
+    val errorMessage by viewModel.error.collectAsState()
+
+
+    LaunchedEffect(signUpResult) {
+        signUpResult?.onSuccess { response ->
+            Log.d("SignUp", "Success: ${response.message}")
+            Toast.makeText(context, "Welcome ${response.data.name}", Toast.LENGTH_LONG).show()
+            name = ""
+            email = ""
+            phoneNumber = ""
+            password = ""
+            confirmPassword = ""
+            viewModel.resetSignUpResult()
+            // You could navigate to the Home screen here
+        }?.onFailure { e ->
+            Log.e("SignUp", "Failure: ${e.message}")
+            Toast.makeText(context, "Sign-up failed: ${e.message}", Toast.LENGTH_LONG).show()
+            viewModel.resetSignUpResult()
+        }
+    }
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { errorJsonString ->
+            val messageToShow = try {
+                val json = org.json.JSONObject(errorJsonString)
+                json.getString("message")
+            } catch (e: Exception) {
+                errorJsonString
+            }
+            Log.e("SignUp", "Error: $messageToShow")
+            Toast.makeText(context, messageToShow, Toast.LENGTH_LONG).show()
+            viewModel.resetError()
+        }
+    }
+
     BackHandler(enabled = isInputFocused) {
         focusManager.clearFocus()
     }
@@ -75,7 +115,7 @@ fun SignUp(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(scrollState)  // Scroll the entire content
-            .padding(vertical =  30.dp)
+            .padding(vertical = 30.dp)
             .fillMaxSize()
             .clickable(
                 indication = null, interactionSource = remember { MutableInteractionSource() }) {
@@ -102,8 +142,7 @@ fun SignUp(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(5.dp))
         Card(
-            modifier = Modifier
-                .padding(vertical = 20.dp, horizontal = 15.dp)
+            modifier = Modifier.padding(vertical = 20.dp, horizontal = 15.dp)
 //                .verticalScroll(scrollState),
             , colors = CardDefaults.cardColors(
                 containerColor = KickzColors.White.copy(alpha = 0.2f),
@@ -177,14 +216,22 @@ fun SignUp(navController: NavHostController) {
             VerticalSpacer(10.dp)
             Button(
                 onClick = {
-                    handleSignUpClick(
-                        name = name,
-                        phoneNumber = phoneNumber,
-                        email = email,
-                        password = password,
-                        confirmPassword = confirmPassword,
-                        context = context
-                    )
+//                    handleSignUpClick(
+//                        name = name,
+//                        phoneNumber = phoneNumber,
+//                        email = email,
+//                        password = password,
+//                        confirmPassword = confirmPassword,
+//                        context = context
+//                    )
+                    if (name.isBlank() || phoneNumber.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                        Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT)
+                            .show()
+                    } else if (password != confirmPassword) {
+                        Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                    } else {
+                        viewModel.signUpUser(name, phoneNumber, email, password, confirmPassword)
+                    }
                 },
                 enabled = true,
                 modifier = Modifier

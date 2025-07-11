@@ -15,7 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kickz_kotlin.navigation.NavigationGraph
 import com.example.kickz_kotlin.screens.SplashScreen
 import com.example.kickz_kotlin.ui.theme.Kickz_kotlinTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,11 +1,10 @@
 package com.example.kickz_kotlin.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.example.kickz_kotlin.screens.homepage.HomeScreen
 import com.example.kickz_kotlin.screens.SplashScreen
 import com.example.kickz_kotlin.userauthentication.SignIn
 import com.example.kickz_kotlin.userauthentication.SignUp
@@ -26,6 +25,8 @@ fun NavigationGraph(
         composable(Screen.SignIn.route) {
             SignIn(navController = navController)
         }
-
+        composable(Screen.HomeScreen.route) {
+            HomeScreen(navController = navController)
+        }
     }
 }

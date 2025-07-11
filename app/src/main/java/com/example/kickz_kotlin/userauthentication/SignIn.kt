@@ -1,6 +1,7 @@
 package com.example.kickz_kotlin.userauthentication
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -23,6 +24,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +40,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.kickz_kotlin.navigation.Screen
 import com.example.kickz_kotlin.ui.theme.CommonTextStyles
@@ -44,9 +48,10 @@ import com.example.kickz_kotlin.ui.theme.KickzColors
 import com.example.kickz_kotlin.utils.CommonBackground
 import com.example.kickz_kotlin.utils.CommonTextField
 import com.example.kickz_kotlin.utils.VerticalSpacer
+import com.example.kickz_kotlin.viewmodel.SignInViewModel
 
 @Composable
-fun SignIn(navController: NavHostController) {
+fun SignIn(navController: NavHostController, viewModel: SignInViewModel = hiltViewModel()) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -55,6 +60,35 @@ fun SignIn(navController: NavHostController) {
     var isInputFocused by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+
+    val signInResultEvent by viewModel.signInResult.collectAsState()
+    val signInErrorEvent by viewModel.signInError.collectAsState()
+
+    LaunchedEffect(signInResultEvent) {
+        signInResultEvent?.onSuccess { result ->
+            Log.d("SignIn", "Success, token: ${result.message}")
+            Toast.makeText(context, "Welcome back ${result.data}", Toast.LENGTH_LONG).show()
+
+            navController.navigate(Screen.HomeScreen.route)
+            // Save token, navigate to home, etc.
+        }?.onFailure { e ->
+            Log.e("SignIn", "Failure: ${e.message}")
+            Toast.makeText(context, "Sign-in failed: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    LaunchedEffect(signInErrorEvent) {
+        signInErrorEvent?.let { errorJsonString ->
+            val messageToShow = try {
+                val json = org.json.JSONObject(errorJsonString)
+                json.getString("message")
+            } catch (e: Exception) {
+                errorJsonString
+            }
+            Log.e("SignUp", "Error: $messageToShow")
+            Toast.makeText(context, messageToShow, Toast.LENGTH_LONG).show()
+        }
+    }
 
     BackHandler(enabled = isInputFocused) {
         focusManager.clearFocus()
@@ -150,9 +184,13 @@ fun SignIn(navController: NavHostController) {
                     VerticalSpacer(20.dp)
                     Button(
                         onClick = {
-                            handleSignIn(
-                                email = email, password = password, context = context
-                            )
+                            if (email.isBlank() || password.isBlank()) {
+                                Toast.makeText(
+                                    context, "Please fill in all fields", Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                viewModel.singInUser(email,password)
+                            }
                         },
                         enabled = true,
                         modifier = Modifier

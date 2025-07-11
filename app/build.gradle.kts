@@ -79,4 +79,7 @@ dependencies {
     // Hilt (with kapt)
     implementation("com.google.dagger:hilt-android:2.56.2")
     kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+
+    //DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 }
