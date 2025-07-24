@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -36,9 +37,8 @@ fun HomepageBanner(modifier: Modifier = Modifier) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF232b43),
-                        Color(0xFF020305),
-                        Color(0xFF251814)                    )
+                        Color(0xFF232b43), Color(0xFF020305), Color(0xFF251814)
+                    )
                 )
             )
     ) {
@@ -104,11 +104,11 @@ fun HomepageBanner(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .background(
                         brush = Brush.horizontalGradient(
-                            listOf(
-                                Color(0xFF353e56),
-                                Color(0xFF3b3a43),
-                                Color(0xFF3e3432),
-                                Color(0xFF423026),
+                            colors = listOf(
+                                Color(0xFF1b2b4b),
+                                Color(0xFF1c243a),
+                                Color(0xFF2d201f),
+                                Color(0xFF30190a),
                             )
                         ), shape = RoundedCornerShape(14.dp)
                     )
@@ -120,24 +120,32 @@ fun HomepageBanner(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .background(
                             brush = Brush.horizontalGradient(
-                                listOf(
+                                colors = listOf(
                                     Color(0xFF353e56),
                                     Color(0xFF3b3a43),
                                     Color(0xFF3e3432),
                                     Color(0xFF423026),
                                 )
-                            ), shape = RoundedCornerShape(14.dp)
+                            ), shape = RoundedCornerShape(8.dp)
                         )
-                        .padding(20.dp), contentAlignment = Alignment.Center
+                        .padding(bottom = 15.dp, top = 5.dp), contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Hello")
+                        Text(
+                            text = "👟",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+
+                        )
+//                        VerticalSpacer(10.dp)
                         Text(
                             "Featured Collection",
                             color = KickzColors.White,
                             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                             fontWeight = FontWeight.Bold,
                         )
+//                        VerticalSpacer(10.dp)
                     }
                 }
             }

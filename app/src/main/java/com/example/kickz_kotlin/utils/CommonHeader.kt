@@ -42,10 +42,11 @@ fun CommonHeader(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            "Kickz",
+            "KICKZ",
             style = CommonTextStyles.heading,
             color = KickzColors.Black,
-            fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = MaterialTheme.typography.headlineSmall.fontSize,
         )
         Row {
             Icon(

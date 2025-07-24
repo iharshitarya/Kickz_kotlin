@@ -1,6 +1,12 @@
 package com.example.kickz_kotlin.screens.homepage
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,10 +37,28 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavHostController) 
         }
     }
 
-    Column {
-        CommonHeader()
-//        HomepageBanner()
-        HomepageCategory()
-        Text("Hello")
-    }
+   Scaffold {innerPadding ->
+       Column (modifier = Modifier.padding(innerPadding)){
+           CommonHeader()
+           LazyColumn(Modifier.fillMaxSize()) {
+               item {
+                   HomepageBanner()
+               }
+               item {
+                   HomepageCategory()
+               }
+               item {
+                   HomepageShopByBrands()
+               }
+               item {
+                   HomepageFeaturedCollection()
+               }
+               item{
+                   Text("hello")
+               }
+           }
+       }
+
+   }
+
 }
